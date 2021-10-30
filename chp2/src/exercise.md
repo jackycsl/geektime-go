@@ -31,9 +31,9 @@ example code:
     if err != nil {
       switch {
       case errors.Is(err, sql.ErrNoRows):
-        return nil, errors.Wrapf(ErrRecordNotFound, "no data fetched from database, %+v", err)
+        return nil, errors.Wrapf(ErrRecordNotFound, "data not found")
       default:
-        return nil, err
+        return nil, errors.Wrapf(err, "db query system error")
       }
     }
     return &user, nil
@@ -46,9 +46,12 @@ example code:
   data, err = getUserById(id)
   if err != nil {
     switch {
-      case errors.Is(err, ErrRecordNotFound) {
-        // handle error
-      }
+    case errors.Is(err, ErrRecordNotFound) {
+      // depends on business case, may return nil or return 404 not found.
+      return 404
+    default:
+      // handle error
+    }
     }
   }
 ```
