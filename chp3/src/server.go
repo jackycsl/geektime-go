@@ -28,11 +28,16 @@ func main() {
 	g, ctx := errgroup.WithContext(context.Background())
 
 	g.Go(func() error {
-		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-		s := <-quit
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 
-		return fmt.Errorf("caught signal: %v", s.String())
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case s := <-c:
+			return fmt.Errorf("caught signal: %v", s.String())
+		}
+
 	})
 
 	g.Go(func() error {
@@ -53,8 +58,7 @@ func main() {
 		return srv.ListenAndServe()
 	})
 
-	err := g.Wait()
-	if err != nil {
+	if err := g.Wait(); err != nil {
 		fmt.Println(err)
 		return
 	}
