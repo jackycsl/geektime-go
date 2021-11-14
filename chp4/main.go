@@ -20,11 +20,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer()
-	pb.RegisterArticleServiceServer(s, InitArticleService())
+	srv := grpc.NewServer()
+	pb.RegisterArticleServiceServer(srv, InitArticleService())
 
 	g, ctx := errgroup.WithContext(context.Background())
 
+	// Listen for terminate signal
 	g.Go(func() error {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
@@ -38,16 +39,21 @@ func main() {
 
 	})
 
+	// Start server
 	g.Go(func() error {
 		log.Printf("server listening at %v", lis.Addr())
 
-		go func() {
-			<-ctx.Done()
+		return srv.Serve(lis)
+	})
 
-			fmt.Println("Stopping grpc server...")
-			s.GracefulStop()
-		}()
-		return s.Serve(lis)
+	// Stop server
+	g.Go(func() error {
+		<-ctx.Done()
+
+		fmt.Println("Stopping http server...")
+		srv.GracefulStop()
+
+		return nil
 	})
 
 	if err := g.Wait(); err != nil {
