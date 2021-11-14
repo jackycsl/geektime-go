@@ -10,9 +10,6 @@ import (
 	"syscall"
 
 	pb "github.com/jackycsl/geektime-go/chp4/api"
-	"github.com/jackycsl/geektime-go/chp4/internal/biz"
-	"github.com/jackycsl/geektime-go/chp4/internal/data"
-	"github.com/jackycsl/geektime-go/chp4/internal/service"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 )
@@ -57,13 +54,4 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-}
-
-// wire generate 时遇到 error, 暂时用手写， 请问老师可以帮忙看为什么会有error
-func InitArticleService() *service.ArticleService {
-	db := data.NewData()
-	articleRepo := data.NewArticleRepo(db)
-	articleBiz := biz.NewArticleUseCase(articleRepo)
-	articleService := service.NewArticleService(articleBiz)
-	return articleService
 }

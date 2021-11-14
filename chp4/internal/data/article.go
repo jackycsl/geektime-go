@@ -1,15 +1,13 @@
 // DO -> PO
 package data
 
-import (
-	"github.com/jackycsl/geektime-go/chp4/internal/biz"
-)
+import "github.com/jackycsl/geektime-go/chp4/internal/biz"
 
 type ArticleRepo struct {
 	data *Data
 }
 
-func NewArticleRepo(data *Data) *ArticleRepo {
+func NewArticleRepo(data *Data) biz.ArticleRepo {
 	return &ArticleRepo{
 		data: data,
 	}

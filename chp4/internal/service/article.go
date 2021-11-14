@@ -5,11 +5,12 @@ package service
 import (
 	"context"
 
+	"github.com/google/wire"
 	pb "github.com/jackycsl/geektime-go/chp4/api"
 	"github.com/jackycsl/geektime-go/chp4/internal/biz"
 )
 
-// var ProviderSet = wire.NewSet(NewArticleService)
+var ProviderSet = wire.NewSet(NewArticleService)
 
 type ArticleService struct {
 	pb.UnimplementedArticleServiceServer

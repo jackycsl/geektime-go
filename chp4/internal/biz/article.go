@@ -4,9 +4,11 @@ package biz
 
 import (
 	"errors"
+
+	"github.com/google/wire"
 )
 
-// var ProviderSet = wire.NewSet(NewArticleUseCase)
+var ProviderSet = wire.NewSet(NewArticleUseCase)
 
 type Article struct {
 	ID      int64
@@ -15,7 +17,7 @@ type Article struct {
 }
 
 type ArticleRepo interface {
-	GetArticle(cid int64) (*Article, error)
+	GetArticle(id int64) (*Article, error)
 }
 
 type ArticleUseCase struct {

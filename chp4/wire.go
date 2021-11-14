@@ -11,6 +11,7 @@ import (
 )
 
 func InitArticleService() *service.ArticleService {
-	wire.Build(service.NewArticleService, biz.NewArticleUseCase, data.NewArticleRepo, data.NewData)
+	// wire.Build(service.NewArticleService, biz.NewArticleUseCase, data.NewArticleRepo, data.NewData)
+	wire.Build(service.ProviderSet, biz.ProviderSet, data.ProviderSet)
 	return &service.ArticleService{}
 }
