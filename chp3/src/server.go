@@ -27,6 +27,7 @@ func main() {
 
 	g, ctx := errgroup.WithContext(context.Background())
 
+	// Listen for signal terminate
 	g.Go(func() error {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
@@ -40,22 +41,26 @@ func main() {
 
 	})
 
+	// start server
 	g.Go(func() error {
 		fmt.Println("Starting http server...")
 
-		go func() {
-			<-ctx.Done()
-
-			ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-			defer cancel()
-
-			fmt.Println("Stopping http server...")
-			err := srv.Shutdown(ctx)
-			if err != nil {
-				return
-			}
-		}()
 		return srv.ListenAndServe()
+	})
+
+	// stop server
+	g.Go(func() error {
+		<-ctx.Done()
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		fmt.Println("Stopping http server...")
+		err := srv.Shutdown(ctx)
+		if err != nil {
+			return err
+		}
+		return nil
 	})
 
 	if err := g.Wait(); err != nil {
