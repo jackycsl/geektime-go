@@ -64,6 +64,6 @@ func InitArticleService() *service.ArticleService {
 	db := data.NewData()
 	articleRepo := data.NewArticleRepo(db)
 	articleBiz := biz.NewArticleUseCase(articleRepo)
-	userService := service.NewArticleService(articleBiz)
-	return userService
+	articleService := service.NewArticleService(articleBiz)
+	return articleService
 }
