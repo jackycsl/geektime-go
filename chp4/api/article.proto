@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package article;
+option go_package = "github.com/jackycsl/geektime-go/chp4/api/article";
+
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=.
+// --go-grpc_opt=paths=source_relative article.proto
+
+service ArticleService {
+  rpc GetArticle(GetArticleRequest) returns (GetArticleReply) {}
+}
+
+message Article {
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+message GetArticleRequest { int64 id = 1; }
+
+message GetArticleReply { Article Article = 1; }

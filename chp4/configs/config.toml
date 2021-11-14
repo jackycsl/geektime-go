@@ -1,0 +1,10 @@
+[server.grpc]
+port = 9005
+
+[mysql.geekbang]
+    connMaxLifetime = "300s"
+    debug = true
+    dsn = "root:root@tcp(127.0.0.1:13306)/geekbang-camp?charset=utf8mb4&collation=utf8mb4_general_ci&parseTime=True&loc=Local"
+    level = "panic"
+    maxIdleConns = 50
+    maxOpenConns = 100
