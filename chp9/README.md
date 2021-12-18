@@ -8,10 +8,12 @@ A decoder that splits received Bytes Buffer by fixed number of bytes. For exampl
 A fixed length frame decoder will decode them into three packets with fixed length from four fragmented packets.
 
 Before:
+| 1 | 2 | 3 | 4 |
 |---|---|----|---|
 |A | BC |DEFG| HI|
 
 After:
+| 1 | 2 | 3 |
 |---|---|---|
 |ABC|DEF|GHI|
 
@@ -21,11 +23,12 @@ A decoder that splits the received Byte Buffers by one or more delimiters. It is
 For example,
 
 Before:
+| Bytes |
 |-------------|
 |ABC\nDEF\r\n |
-|-------------|
 
 After:
+| 1 | 2 |
 |---|---|
 |ABC|DEF|
 
