@@ -8,13 +8,12 @@ A decoder that splits received Bytes Buffer by fixed number of bytes. For exampl
 A fixed length frame decoder will decode them into three packets with fixed length from four fragmented packets.
 
 Before:
-+---+----+------+----+
-| A | BC | DEFG | HI |
-+---+----+------+----+
+|---|---|----|---|
+|A | BC |DEFG| HI|
+
 After:
-+-----+-----+-----+
-| ABC | DEF | GHI |
-+-----+-----+-----+
+|---|---|---|
+|ABC|DEF|GHI|
 
 ### delimiter based length
 
@@ -22,25 +21,28 @@ A decoder that splits the received Byte Buffers by one or more delimiters. It is
 For example,
 
 Before:
-+--------------+
-| ABC\nDEF\r\n |
-+--------------+
+|-------------|
+|ABC\nDEF\r\n |
+|-------------|
 
 After:
-+-----+-----+
-| ABC | DEF |
-+-----+-----+
+|---|---|
+|ABC|DEF|
 
 ### length field based frame decoder
 
 A decoder that splits the received ByteBufs dynamically by the value of the length field in the message. It is particularly useful when you decode a binary message which has an integer header field that represents the length of the message body or the whole message.
 For example, because we can get the length of content, you might want to strip the length field.
 
-BEFORE DECODE (14 bytes) AFTER DECODE (12 bytes)
-+--------+----------------+ +----------------+
-| Length | Actual Content |----->| Actual Content |
-| 0x000C | "HELLO, WORLD" | | "HELLO, WORLD" |
-+--------+----------------+ +----------------+
+BEFORE DECODE (14 bytes)
+| Length | Actual Content |
+|--------|----------------|
+| 0x000C | "HELLO, WORLD" |
+
+AFTER DECODE (12 bytes)
+|Actual Content |
+|---------------|
+|"HELLO, WORLD" |
 
 ## 2. 实现一个从 socket connection 中解码出 goim 协议的解码器。
 
